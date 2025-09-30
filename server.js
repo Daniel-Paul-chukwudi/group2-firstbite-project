@@ -3,10 +3,12 @@ const mongoose = require('mongoose')
 const express = require('express')
 const DB = process.env.DB
 const PORT = process.env.PORT
+const userRouter = require('./routes/userRoute')
 
 const app = express()
 
 app.use(express.json())
+app.use(userRouter)
 
 
 mongoose.connect(DB).then(()=>{

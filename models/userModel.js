@@ -3,22 +3,35 @@ const mongoose = require('mongoose')
 const userSchema = mongoose.Schema({
     fullName:{
         type:String,
-
+        required:true
     },
     email:{
-        type:String
-    },
-    password:{
-        type:String
+        type:String,
+        required:true,
+        unique:true
     },
     phoneNumber:{
-        type:Number
+        type:Number,
+        required:true
     },
-    isVerified:{
-        type:Boolean
+    password:{
+        type:String,
+        required:true
     },
-    token:{
+    deliveryAddress:{
         type:String
+    },
+    cart:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Cart"
+    }],
+    orderHistory:[{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:"Order"
+    }],
+    isVerified:{
+        type:Boolean,
+        default:false
     }
 })
 
