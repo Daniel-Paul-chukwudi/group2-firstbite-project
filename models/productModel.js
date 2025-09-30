@@ -7,6 +7,13 @@ const productSchema = mongoose.Schema({
     },price:{
         type:Number
     },
+    email: {
+    type: String,
+    required: true,
+    trim: true,
+    unique: true,
+    lowercase: true,
+},
     category:{
         type:String
     },
