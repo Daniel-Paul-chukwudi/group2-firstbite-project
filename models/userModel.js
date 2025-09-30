@@ -23,13 +23,17 @@ const userSchema = mongoose.Schema({
     },
     cart:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Cart"
+        ref:"Carts"
     }],
     orderHistory:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Order"
+        ref:"Orders"
     }],
     isVerified:{
+        type:Boolean,
+        default:false
+    },
+    isOnline:{
         type:Boolean,
         default:false
     }
