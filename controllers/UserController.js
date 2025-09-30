@@ -120,15 +120,14 @@ exports.verifyUser = async(req,res)=>{
 
 exports.signIn = async (req,res)=>{
     try {
-        const {email,password,phoneNumber} = req.body
-        if (!email && !phoneNumber){
+        const {email,password} = req.body
+        if (!email){
             return res.status(400),json({
                 message:"Please enter either your email or phone number"
             })
         }
         const Echeck =  await userModel.findOne({email:email.toLowerCase()})
-        const Pcheck =  await userModel.findOne({phoneNumber:phoneNumber})
-        if(!Echeck && !Pcheck){
+        if(!Echeck){
             return res.status(404).json({
                 message:"invalid login credentials"
             })

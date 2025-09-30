@@ -9,6 +9,13 @@ const app = express()
 
 app.use(express.json())
 app.use(userRouter)
+// const date = new Date();
+// console.log(date);
+// console.log(date.toString().split(' '));
+
+
+// console.log(typeof(date));
+
 
 
 mongoose.connect(DB).then(()=>{
