@@ -3,15 +3,20 @@ const mongoose = require('mongoose')
 const productSchema = mongoose.Schema({
     productName:{
         type:String,
+        required:true
 
-    },price:{
-        type:Number
+    },
+    price:{
+        type:Number,
+        required:true
     },
     category:{
-        type:String
+        type:String,
+        required:true
     },
     description:{
-        type:String
+        type:String,
+        required:true
     },
     productImages:[{
         imageUrl:{

@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require("dotenv").config()
 const secret = process.env.jwt_secret
+const user = process.env.user
 const {sendMail} = require('../middleware/email')
+const {sendEmail} = require('../middleware/mailGun')
 const {verify,forgotPassword} = require('../middleware/emailTemplates')
 
 exports.signUp = async (req,res)=>{
@@ -14,17 +16,17 @@ exports.signUp = async (req,res)=>{
         const Echeck = await userModel.findOne({email:email.toLowerCase()})
         const Pcheck = await userModel.findOne({phoneNumber:phoneNumber})
         
-        if(Echeck){
-            return res.status(400).json({
-                message:"email is already in use"
-            })
-        }
+        // if(Echeck){
+        //     return res.status(400).json({
+        //         message:"email is already in use"
+        //     })
+        // }
         if(Pcheck){
             return res.status(400).json({
                 message:"phonenumber is already in use"
             })
         }
-        if(password !== confrimPassword){
+        if(password !== confirmPassword){
             return res.status(400).json({
                 message:"passwords do not match"
             })
@@ -53,14 +55,23 @@ exports.signUp = async (req,res)=>{
         // console.log(req.protocol)
         // console.log(req.get("host"))
 
-        await sendMail({
+        // await sendMail({
+        //     to:email,
+        //     subject,
+        //     html:verify(link,user.fullName)
+        // }).then(()=>{console.log("mail sent");
+        // }).catch((e)=>{
+        //     console.log(e);
+            
+        // })
+        
+        await sendEmail({
             to:email,
             subject,
             html:verify(link,user.fullName)
         }).then(()=>{console.log("mail sent");
         }).catch((e)=>{
             console.log(e);
-            
         })
         
 
