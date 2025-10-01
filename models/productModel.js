@@ -16,14 +16,12 @@ const productSchema = mongoose.Schema({
     productImages:[{
         imageUrl:{
             type:String,
-            required:true
         },
         publicId:{
             type:String,
-            required:true
         }
     }]
 })
 
-const productModel = mongoose.model("productss",productSchema)
+const productModel = mongoose.model("products",productSchema)
 module.exports = productModel

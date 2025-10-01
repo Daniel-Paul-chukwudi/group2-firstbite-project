@@ -23,17 +23,21 @@ const userSchema = mongoose.Schema({
     },
     cart:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Cart"
+        ref:"Carts"
     }],
     orderHistory:[{
         type:mongoose.Schema.Types.ObjectId,
-        ref:"Order"
+        ref:"Orders"
     }],
     isVerified:{
         type:Boolean,
         default:false
+    },
+    isOnline:{
+        type:Boolean,
+        default:false
     }
-})
+},{timestamps:true})
 
 const userModel = mongoose.model("users",userSchema)
 module.exports = userModel

@@ -1,8 +1,15 @@
-const {signUp} = require('../controllers/UserController')
+const {signUp,verifyUser,signIn,forgotPassword,resetPassword, changePassword} = require('../controllers/UserController')
 const express = require('express')
 const router = express.Router()
+const {signUpValidator,signInValidator,forgotPasswordValidator,resetPasswordValidator,changePasswordValidator} = require('../middleware/validator')
 
-router.post('/signUp',signUp)
+router.post('/signUp',signUpValidator,signUp)
+router.post('/verify/:token',verifyUser)
+router.post('/signIn',signInValidator,signIn)
+router.post('/forgot',forgotPasswordValidator,forgotPassword)
+router.post('/reset/:token',resetPasswordValidator,resetPassword)
+router.post('/change/:id',changePasswordValidator,changePassword)
+
 
 
 module.exports = router
