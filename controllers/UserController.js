@@ -16,11 +16,11 @@ exports.signUp = async (req,res)=>{
         const Echeck = await userModel.findOne({email:email.toLowerCase()})
         const Pcheck = await userModel.findOne({phoneNumber:phoneNumber})
         
-        // if(Echeck){
-        //     return res.status(400).json({
-        //         message:"email is already in use"
-        //     })
-        // }
+        if(Echeck){
+            return res.status(400).json({
+                message:"email is already in use"
+            })
+        }
         if(Pcheck){
             return res.status(400).json({
                 message:"phonenumber is already in use"
@@ -55,23 +55,14 @@ exports.signUp = async (req,res)=>{
         // console.log(req.protocol)
         // console.log(req.get("host"))
 
-        await sendMail({
-            to:email,
-            subject,
-            html:verify(link,user.fullName)
-        }).then(()=>{console.log("mail sent");
-        }).catch((e)=>{
-            console.log(e);
-            
-        })
-        
-        // await sendEmail({
+        // await sendMail({
         //     to:email,
         //     subject,
         //     html:verify(link,user.fullName)
         // }).then(()=>{console.log("mail sent");
         // }).catch((e)=>{
         //     console.log(e);
+            
         // })
         
 
@@ -134,7 +125,7 @@ exports.signIn = async (req,res)=>{
         const {email,password} = req.body
         if (!email){
             return res.status(400),json({
-                message:"Please enter either your email or phone number"
+                message:"Please enter your email"
             })
         }
         const Echeck =  await userModel.findOne({email:email.toLowerCase()})
@@ -147,11 +138,11 @@ exports.signIn = async (req,res)=>{
         if(!checkPassword){
             return res.status(400).json("invalid login credentials")
         }
-        if(Echeck.isVerified === false){
-            return res.status(403).json({
-                message:"Kindly verify your email to continue"
-            })
-        }
+        // if(Echeck.isVerified === false){
+        //     return res.status(403).json({
+        //         message:"Kindly verify your email to continue"
+        //     })
+        // }
         await userModel.findByIdAndUpdate(Echeck._id,{isOnline:true})
         res.status(200).json({
             message:`Welcome ${Echeck.fullName} we are happy to see you`,
