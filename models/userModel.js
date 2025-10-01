@@ -19,12 +19,13 @@ const userSchema = mongoose.Schema({
         required:true
     },
     deliveryAddress:{
-        type:String
+        type:String,
+        
     },
-    cart:[{
+    cart:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Carts"
-    }],
+    },
     orderHistory:[{
         type:mongoose.Schema.Types.ObjectId,
         ref:"Orders"

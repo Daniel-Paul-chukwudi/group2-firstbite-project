@@ -5,6 +5,7 @@ const DB = process.env.DB
 const PORT = process.env.PORT
 const userRouter = require('./routes/userRoute')
 const productRouter = require('./routes/productRoute')
+const cartRouter = require('./routes/cartRoute')
 const cors = require('cors') 
 
 const app = express()
@@ -13,6 +14,7 @@ app.use(express.json())
 app.use(cors({origin:"*"}))
 app.use(userRouter)
 app.use(productRouter)
+app.use(cartRouter)
 // const date = new Date();
 // console.log(date);
 // console.log(date.toString().split(' '));
