@@ -89,7 +89,7 @@ exports.getCategories= async (req,res)=>{
     try {
         const products = await productModel.find()
         let categories = []
-        console.log(products[1].category);
+        
         let holder = []
         products.forEach(x => {
             holder.push(x.category)
