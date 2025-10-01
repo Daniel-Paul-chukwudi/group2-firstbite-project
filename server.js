@@ -3,6 +3,9 @@ const mongoose = require('mongoose')
 const express = require('express')
 const DB = process.env.DB
 const PORT = process.env.PORT
+const userRoute = require('./routes/userRoute')
+const productRoute = require('./routes/productRoute')
+const addCartRoute = require('./routes/cartRoute')
 const userRouter = require('./routes/userRoute')
 const productRouter = require('./routes/productRoute')
 const cors = require('cors') 
@@ -10,6 +13,9 @@ const cors = require('cors')
 const app = express()
 
 app.use(express.json())
+app.use('/api/v1',userRoute)
+app.use('/api/v1',productRoute)
+app.use('/api/v1', addCartRoute)
 app.use(cors({origin:"*"}))
 app.use(userRouter)
 app.use(productRouter)
@@ -32,5 +38,8 @@ mongoose.connect(DB).then(()=>{
     
 }).catch((error)=>{
     console.log(error.message);
-})
+}) 
+
+
+
 

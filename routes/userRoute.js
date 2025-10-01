@@ -1,6 +1,6 @@
+const router = require('express').Router()
 const {signUp,verifyUser,signIn,forgotPassword,resetPassword, changePassword} = require('../controllers/UserController')
-const express = require('express')
-const router = express.Router()
+
 const {signUpValidator,signInValidator,forgotPasswordValidator,resetPasswordValidator,changePasswordValidator} = require('../middleware/validator')
 
 // router.post('/signUp',signUpValidator,signUp)
@@ -13,7 +13,7 @@ router.post('/change/:id',changePasswordValidator,changePassword)
 
 
 
-module.exports = router
+module.exports = router 
 
 
 
