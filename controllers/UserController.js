@@ -125,7 +125,7 @@ exports.signIn = async (req,res)=>{
         const {email,password} = req.body
         if (!email){
             return res.status(400),json({
-                message:"Please enter either your email or phone number"
+                message:"Please enter your email"
             })
         }
         const Echeck =  await userModel.findOne({email:email.toLowerCase()})
