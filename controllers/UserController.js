@@ -55,24 +55,24 @@ exports.signUp = async (req,res)=>{
         // console.log(req.protocol)
         // console.log(req.get("host"))
 
-        // await sendMail({
-        //     to:email,
-        //     subject,
-        //     html:verify(link,user.fullName)
-        // }).then(()=>{console.log("mail sent");
-        // }).catch((e)=>{
-        //     console.log(e);
-            
-        // })
-        
-        await sendEmail({
+        await sendMail({
             to:email,
             subject,
             html:verify(link,user.fullName)
         }).then(()=>{console.log("mail sent");
         }).catch((e)=>{
             console.log(e);
+            
         })
+        
+        // await sendEmail({
+        //     to:email,
+        //     subject,
+        //     html:verify(link,user.fullName)
+        // }).then(()=>{console.log("mail sent");
+        // }).catch((e)=>{
+        //     console.log(e);
+        // })
         
 
 
