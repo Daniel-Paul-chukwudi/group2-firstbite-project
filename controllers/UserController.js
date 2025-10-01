@@ -11,7 +11,7 @@ const {verify,forgotPassword} = require('../middleware/emailTemplates')
 
 exports.signUp = async (req,res)=>{
     try {
-        const {fullName,email,password,phoneNumber,confrimPassword,deliveryAddress} = req.body
+        const {fullName,email,password,phoneNumber,confirmPassword,deliveryAddress} = req.body
 
         const Echeck = await userModel.findOne({email:email.toLowerCase()})
         const Pcheck = await userModel.findOne({phoneNumber:phoneNumber})
