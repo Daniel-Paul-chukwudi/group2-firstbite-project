@@ -1,6 +1,7 @@
+const router = require('express').Router()
 const {addProduct} = require('../controllers/productConroller')
-const express = require('express')
-const router = express()
 
+router.post('/add', addProduct)
 
+module.exports = router
 
