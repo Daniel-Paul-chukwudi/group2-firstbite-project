@@ -6,7 +6,7 @@ require("dotenv").config()
 const secret = process.env.jwt_secret
 const user = process.env.user
 const {sendMail} = require('../middleware/email')
-const {sendEmail} = require('../middleware/mailGun')
+// const {sendEmail} = require('../middleware/mailGun')
 const {verify,forgotPassword} = require('../middleware/emailTemplates')
 
 exports.signUp = async (req,res)=>{
