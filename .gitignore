@@ -1,2 +1,4 @@
 node_modules
 .env
+models/orderModel.js
+models/productModel.js
