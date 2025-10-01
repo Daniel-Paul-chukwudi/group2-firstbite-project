@@ -5,10 +5,12 @@ const DB = process.env.DB
 const PORT = process.env.PORT
 const userRouter = require('./routes/userRoute')
 const productRouter = require('./routes/productRoute')
+const cors = require('cors') 
 
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 app.use(userRouter)
 app.use(productRouter)
 // const date = new Date();
