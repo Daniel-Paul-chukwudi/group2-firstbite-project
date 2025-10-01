@@ -1,14 +1,15 @@
-const { default: mongoose } = require("mongoose")
+const mongoose = require("mongoose")
 const productModel = require("../models/productModel")
-
+const cloudinary = require('../config/cloudinary')
+const fs = require('fs')
 
 exports.addProduct = async (req,res)=>{
     try {
         const {productName,price,category,description} = req.body
     const files = req.files
     let response
-    let list = []
-    let babyList = {}
+    let parentList = []
+    let List = {}
 
         if(files && files.length > 0){
             for (const file of files ) {
@@ -19,7 +20,7 @@ exports.addProduct = async (req,res)=>{
                     publicId: response.public_id,
                     imageUrl: response.secure_url
                 }
-                list.push(babyList)
+                parentList.push(List)
                 // console.log(list);
                 
                 fs.unlinkSync(file.path)
@@ -31,10 +32,10 @@ exports.addProduct = async (req,res)=>{
             price,
             category,
             description,
-            productImages:list
+            productImages:parentList
 
         })
-        // await product.save()
+        await product.save()
         res.status(201).json({
             message:"product created successfully",
             data:product
@@ -47,7 +48,22 @@ exports.addProduct = async (req,res)=>{
     }
 }
 
-    exports.getAProduct = async (req,res)=>{
+exports.getAllProduct = async (req,res)=>{
+        try {
+            const products = await productModel.find()
+            res.status(200).json({
+                message:"Products fetched successfully",
+                data:products
+            })
+        } catch (error) {
+            res.status(500).json({
+                message:"Internal Server Error",
+                error:error.message
+            })
+        }
+    }
+
+exports.getAProduct = async (req,res)=>{
         try {
             const id = req.params.id
             const product = await productModel.findById(id)
@@ -67,7 +83,32 @@ exports.addProduct = async (req,res)=>{
             })
         }
     }
-     exports.updateAProduct = async (req,res)=>{
+
+exports.getCategories= async (req,res)=>{
+    try {
+        const products = await productModel.find()
+        let categories = []
+        console.log(products[1].category);
+        let holder = []
+        products.forEach(x => {
+            holder.push(x.category)
+        });
+        categories = holder.filter((value, index, self) => self.indexOf(value) === index);
+        
+        
+        res.status(200).json({
+            message:"All the available categories",
+            data:categories
+        })
+
+    } catch (error) {
+        res.status(500).json({
+                message:"Internal Server Error",
+                error:error.message
+            })
+    }
+}
+exports.updateAProduct = async (req,res)=>{
         try {
             const id = req.params.id
             const {productName,price,category,description} = req.body
@@ -117,7 +158,7 @@ exports.addProduct = async (req,res)=>{
         }
     }   
     
-    exports.deleteAProduct = async (req,res)=>{
+exports.deleteAProduct = async (req,res)=>{
         try {
             const id = req.params.id
             const product = await productModel.findByIdAndDelete(id)
