@@ -73,9 +73,7 @@ exports.verify = (link,firstName,otp)=>{
             <div class="content">
             <p>Hello ${firstName},</p>
             <p>this is your otp use it to verify ${otp} it expires in 5 mins</p>
-                <div class="button-container">
-                    <a href="${link}" class="button">Verify email</a>
-                </div>
+                
                 <p>If your village people dey follow you forget am again</p>
                 <p>Best regards,<br>firstBite Team</p>
             </div>

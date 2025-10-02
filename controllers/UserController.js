@@ -51,7 +51,7 @@ exports.signUp = async (req,res)=>{
         
         const token = await jwt.sign({id:user._id},secret,{expiresIn:"5m"})
         const subject = `Hello ${fullName} kindly verify your email`
-        const link = `${req.protocol}://${req.get("host")}/verify/${token}`
+        // const link = `${req.protocol}://${req.get("host")}/verify/${token}`
         
         
         const  msg={
@@ -63,7 +63,7 @@ exports.signUp = async (req,res)=>{
 
         res.status(201).json({
             message:"User created successfully",
-            data: user
+            data: user,token
         })
 
         }
