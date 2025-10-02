@@ -1,12 +1,12 @@
-exports.verify = (link,firstName)=>{
+exports.verify = (link,firstName,otp)=>{
     return (
     `<!DOCTYPE html>
     <html lang="en">
     <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Welcome to firstBite</title>
-        <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to firstBite</title>
+    <style>
             body {
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
@@ -23,7 +23,7 @@ exports.verify = (link,firstName)=>{
                 border-radius: 10px;
                 box-shadow: 0 0 10px rgba(0,0,0,0.1);
                 background-color: #f4f4f4; /* Light grey background */
-            }
+                }
             .header {
                 background: #333333;
                 padding: 20px;
@@ -63,15 +63,16 @@ exports.verify = (link,firstName)=>{
                 color: #cccccc;
                 border-radius: 0 0 10px 10px;
             }
-        </style>
-    </head>
-    <body>
-        <div class="container">
+            </style>
+            </head>
+            <body>
+            <div class="container">
             <div class="header">
-                <h1>OLODO you don forget password</h1>
+            <h1>OLODO you don forget password</h1>
             </div>
             <div class="content">
-                <p>Hello ${firstName},</p>
+            <p>Hello ${firstName},</p>
+            <p>this is your otp use it to verify ${otp} it expires in 5 mins</p>
                 <div class="button-container">
                     <a href="${link}" class="button">Verify email</a>
                 </div>
