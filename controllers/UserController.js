@@ -31,7 +31,7 @@ exports.signUp = async (req,res)=>{
         }else{
                 const salt = await bcrypt.genSalt(10)
                 const hashPassword = await bcrypt.hash(password,salt)
-                const otp = Math.round(Math.random() * 1e6).toString().padStart(6, "0")
+                const otp = Math.round(Math.random() * 1e4).toString().padStart(4, "0")
 
         
         
@@ -119,7 +119,7 @@ exports.signIn = async (req,res)=>{
     try {
         const {email,password} = req.body
         if (!email){
-            return res.status(400),json({
+            return res.status(400).json({
                 message:"Please enter your email"
             })
         }
@@ -300,7 +300,7 @@ exports.getAll = async (req,res)=>{
     try {
         
         const user = await userModel.find()
-        if(user.length() < 1){
+        if(user.length < 1){
             return res.status(200).json({
                 message:"Database empty",
                 data: user

@@ -4,7 +4,7 @@ const router = express()
 const uploads = require('../middleware/multer')
 
 router.post('/product',uploads.array('productImages',5),addProduct)
-// router.get('/product/:id',getAProduct)
+router.get('/product/:id',getAProduct)
 router.get('/product',getAllProduct)
 router.get('/product/categories',getCategories)
 
