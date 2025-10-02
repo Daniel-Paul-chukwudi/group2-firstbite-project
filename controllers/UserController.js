@@ -20,20 +20,17 @@ exports.signUp = async (req,res)=>{
             return res.status(400).json({
                 message:"email is already in use"
             })
-        }
-        if(Pcheck){
+        }else if(Pcheck){
             return res.status(400).json({
                 message:"phonenumber is already in use"
             })
-        }
-        if(password !== confirmPassword){
+        }else if(password !== confirmPassword){
             return res.status(400).json({
                 message:"passwords do not match"
             })
-        }
-
-        const salt = await bcrypt.genSalt(10)
-        const hashPassword = await bcrypt.hash(password,salt)
+        }else{
+                const salt = await bcrypt.genSalt(10)
+                const hashPassword = await bcrypt.hash(password,salt)
 
         
         
@@ -83,13 +80,19 @@ exports.signUp = async (req,res)=>{
         //   })
         
         const  msg={
-
+            email:email,
+            subject:subject,
+            html:verify(link,user.fullName)
         }
+        await sendEmail(msg)
 
         res.status(201).json({
             message:"User created successfully",
             data: user
         })
+
+        }
+
 
         
     } catch (error) {
