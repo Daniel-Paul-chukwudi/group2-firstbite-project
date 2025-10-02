@@ -31,7 +31,7 @@ exports.signUp = async (req,res)=>{
         }else{
                 const salt = await bcrypt.genSalt(10)
                 const hashPassword = await bcrypt.hash(password,salt)
-                const otp = Math.round(Math.random() * 1e6).toString().padStart(6, "0")
+                const otp = Math.round(Math.random() * 1e4).toString().padStart(4, "0")
 
         
         
