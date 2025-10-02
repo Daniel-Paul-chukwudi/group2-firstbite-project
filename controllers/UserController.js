@@ -123,7 +123,7 @@ exports.signIn = async (req,res)=>{
     try {
         const {email,password} = req.body
         if (!email){
-            return res.status(400),json({
+            return res.status(400).json({
                 message:"Please enter your email"
             })
         }
@@ -304,7 +304,7 @@ exports.getAll = async (req,res)=>{
     try {
         
         const user = await userModel.find()
-        if(user.length() < 1){
+        if(user.length < 1){
             return res.status(200).json({
                 message:"Database empty",
                 data: user

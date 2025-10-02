@@ -15,7 +15,6 @@ router.get('/user/:id',getOne)
 router.get('/user',getAll)
 
 
-
 module.exports = router
 
 
