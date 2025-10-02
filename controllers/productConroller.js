@@ -88,23 +88,28 @@ exports.getAProduct = async (req,res)=>{
 exports.getCategories= async (req,res)=>{
     try {
         const products = await productModel.find()
-        let categories = []
+        
+        
+        var categories = []
         
         let holder = []
         products.forEach(x => {
             holder.push(x.category)
         });
+      
+        
         categories = holder.filter((value, index, self) => self.indexOf(value) === index);
         
         
         res.status(200).json({
             message:"All the available categories",
             data:categories
+        
         })
 
     } catch (error) {
         res.status(500).json({
-                message:"Internal Server Error",
+                message:"Internal Server Error l",
                 error:error.message
             })
     }
@@ -181,3 +186,13 @@ exports.deleteAProduct = async (req,res)=>{
         }
     }
    
+exports.getOneCategory = async ()=>{
+    try {
+        
+    } catch (error) {
+        res.status(500).json({
+                message:"Internal Server Error",
+                error:error.message
+            })
+    }
+}

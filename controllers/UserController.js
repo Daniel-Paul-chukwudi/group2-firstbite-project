@@ -97,7 +97,9 @@ exports.verifyUser = async(req,res)=>{
                         return res.status(400).json({
                             message: 'OTP expired'
                         })
-                }else if (otp !== user.otp) {
+                }
+                }
+                if (otp !== user.otp) {
                         return res.status(400).json({
                             message: 'Invalid otp'
                         })
@@ -106,7 +108,6 @@ exports.verifyUser = async(req,res)=>{
                     res.status(200).json({
                         message:"Email verification successful"
                     })
-                }
             }
         })
 
