@@ -43,6 +43,8 @@ exports.signUp = async (req,res)=>{
         })
         
         await user.save()
+
+        
         
         const token = await jwt.sign({id:user._id},secret,{expiresIn:"5m"})
         // console.log(user._id);
@@ -349,18 +351,13 @@ exports.getAll = async (req,res)=>{
 
 exports.updateUser = async(req,res)=>{
     try {
-        const {fullName,email,phoneNumber,deliveryAddress} = req.body
+        
         const id = req.params.id
 
         const user = await userModel.findById(id)
 
 
-        const update = {
-            fullName:fullName??user.fullName,
-            email:email??user.email,
-            phoneNumber:phoneNumber??user.phoneNumber,
-            deliveryAddress:deliveryAddress??user.deliveryAddress
-        }
+        const update = req.body
 
         const newData = await userModel.findByIdAndUpdate(id,update,{new:true})
 
