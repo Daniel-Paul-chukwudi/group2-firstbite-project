@@ -16,7 +16,6 @@ router.get('/user',getAll)
 router.patch('/user/:id',updateUser)
 
 
-
 module.exports = router
 
 
