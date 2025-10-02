@@ -85,6 +85,8 @@ exports.verifyUser = async(req,res)=>{
         const {otp} = req.body
 
         jwt.verify(token,secret,async (error,result)=>{
+            console.log(result);
+            
             if(error){
                 res.status(400).json({
                     message:"Email Expired"
