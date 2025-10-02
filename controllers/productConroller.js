@@ -115,42 +115,42 @@ exports.updateAProduct = async (req,res)=>{
             const {productName,price,category,description} = req.body
             const files = req.files
             let response
-            let list = []
-            let babyList = {}
-
-            if(files && files.length > 0){
-                for (const file of files ) {
-                    // console.log("the files",file);
-
-                    response = await cloudinary.uploader.upload(file.path)
-                    babyList = {
-                        publicId: response.public_id,
-                        imageUrl: response.secure_url
-                    }
-                    list.push(babyList)
-                    // console.log(list);
-
-                    fs.unlinkSync(file.path)
-                }
-            }
-
-            const product = await productModel.findByIdAndUpdate(id,{
-                productName,
-                price,
-                category,
-                description,
-                productImages:list
-            },{new:true})
-
+            let parentList = []
+            let list = {}
+            const product = await productModel.findById(id)
             if(!product){
                 return res.status(404).json({
                     message:"Product not found"
                 })
             }
-            res.status(200).json({
-                message:"Product updated successfully",
-                data:product
-            })
+            if(files && files.length > 0){
+                for (const pd of product.productImages){
+                    await cloudinary.uploader.destroy(pd.publicId)
+                    fs.unlinkSync(files.path)
+                    }
+                for (const file of files){
+                    response = await cloudinary.uploader.upload(file.path)
+                    babyList = {
+                    publicId: response.public_id,
+                    imageUrl: response.secure_url,
+                    };
+                    parentList.push(list);
+                    fs.unlinkSync(file.path)
+                    }
+            }else{
+                const updatedProduct = await productModel.findByIdAndUpdate(id,{
+                    productName: productName ?? product.productName,
+                    price:price ?? product.price,
+                    category:category ?? product.category,
+                    description: description ?? product.description,
+                    productImages:parentList
+                },{new:true})
+                
+                res.status(200).json({
+                    message:"Product updated successfully",
+                    data:updatedProduct
+                })
+            }
         } catch (error) {
             res.status(500).json({
                 message:"Internal Server Error",
@@ -162,12 +162,13 @@ exports.updateAProduct = async (req,res)=>{
 exports.deleteAProduct = async (req,res)=>{
         try {
             const id = req.params.id
-            const product = await productModel.findByIdAndDelete(id)
+            const product = await productModel.findById(id)
             if(!product){
                 return res.status(404).json({
                     message:"Product not found"
                 })
             }
+            await productModel.findByIdAndDelete(id)
             res.status(200).json({
                 message:"Product deleted successfully",
                 data:product
