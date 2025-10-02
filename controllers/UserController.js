@@ -160,11 +160,11 @@ exports.signIn = async (req,res)=>{
         if(!checkPassword){
             return res.status(400).json("invalid login credentials")
         }
-        // if(Echeck.isVerified === false){
-        //     return res.status(403).json({
-        //         message:"Kindly verify your email to continue"
-        //     })
-        // }
+        if(Echeck.isVerified === false){
+            return res.status(403).json({
+                message:"Kindly verify your email to continue"
+            })
+        }
         await userModel.findByIdAndUpdate(Echeck._id,{isOnline:true})
         res.status(200).json({
             message:`Welcome ${Echeck.fullName} we are happy to see you`,
