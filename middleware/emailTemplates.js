@@ -1,4 +1,4 @@
-exports.verify = (link,firstName,otp)=>{
+exports.verify = (firstName,otp)=>{
     return (
     `<!DOCTYPE html>
     <html lang="en">

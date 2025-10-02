@@ -54,10 +54,11 @@ exports.signUp = async (req,res)=>{
         // const link = `${req.protocol}://${req.get("host")}/verify/${token}`
         
         
+        
         const  msg={
             email:email,
             subject:subject,
-            html:verify(link,user.fullName,otp)
+            html:verify(user.fullName,otp)
         }
         await sendEmail(msg)
 
