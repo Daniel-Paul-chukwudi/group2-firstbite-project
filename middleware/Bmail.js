@@ -4,7 +4,7 @@ require('dotenv').config()
 const sendEmail = async (options) => {
     try {
         const response = await axios.post('https://api.brevo.com/v3/smtp/email', {
-            sender: { email: process.env.BREVO_USER, name: "The Curve Africa" },
+            sender: { email: process.env.BREVO_USER, name: "FirstBite Team" },
             to: [{ email: options.email }],
             subject: options.subject,
             htmlContent: options.html
