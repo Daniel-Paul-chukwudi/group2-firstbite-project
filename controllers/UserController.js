@@ -4,14 +4,15 @@ const jwt = require('jsonwebtoken')
 require("dotenv").config()
 const secret = process.env.jwt_secret
 const user = process.env.user
+const Euser = process.env.Euser
 const {sendMail} = require('../middleware/email')
-// const {sendEmail} = require('../middleware/mailGun')
 const {verify,forgotPassword} = require('../middleware/emailTemplates')
+const sendEmail = require('../middleware/Bmail')
 
 exports.signUp = async (req,res)=>{
     try {
         const {fullName,email,password,phoneNumber,confirmPassword,deliveryAddress} = req.body
-
+        
         const Echeck = await userModel.findOne({email:email.toLowerCase()})
         const Pcheck = await userModel.findOne({phoneNumber:phoneNumber})
         
@@ -45,7 +46,7 @@ exports.signUp = async (req,res)=>{
         })
         
         await user.save()
-
+        
         const token = await jwt.sign({id:user._id},secret,{expiresIn:"5m"})
         // console.log(user._id);
         // console.log(token);
@@ -53,18 +54,37 @@ exports.signUp = async (req,res)=>{
         const link = `${req.protocol}://${req.get("host")}/verify/${token}`
         // console.log(req.protocol)
         // console.log(req.get("host"))
-
-        // await sendMail({
-        //     to:email,
-        //     subject,
-        //     html:verify(link,user.fullName)
-        // }).then(()=>{console.log("mail sent");
-        // }).catch((e)=>{
-        //     console.log(e);
-            
-        // })
         
+        // await sendMail({
+            //     to:email,
+            //     subject,
+            //     html:verify(link,user.fullName)
+            // }).then(()=>{console.log("mail sent");
+        // }).catch((e)=>{
+            //     console.log(e);
+            
+            // })
+            
 
+        // const msg = {
+        //   to: email, 
+        //   from: Euser, 
+        //   subject: subject,
+        //   text: 'testing',
+        //   html:verify(link,user.fullName),
+        // }
+        // await sgMail
+        //   .send(msg)
+        //   .then(() => {
+        //     console.log('Email sent')
+        //   })
+        //   .catch((error) => {
+        //     console.error(error)
+        //   })
+        
+        const  msg={
+
+        }
 
         res.status(201).json({
             message:"User created successfully",
@@ -319,6 +339,37 @@ exports.getAll = async (req,res)=>{
     } catch (error) {
         res.status(500).json({
             message:"internal server error",
+            error:error.message
+        })
+    }
+}
+
+exports.updateUser = async(req,res)=>{
+    try {
+        const {fullName,email,phoneNumber,deliveryAddress} = req.body
+        const id = req.params.id
+
+        const user = await userModel.findById(id)
+
+
+        const update = {
+            fullName:fullName??user.fullName,
+            email:email??user.email,
+            phoneNumber:phoneNumber??user.phoneNumber,
+            deliveryAddress:deliveryAddress??user.deliveryAddress
+        }
+
+        const newData = await userModel.findByIdAndUpdate(id,update,{new:true})
+
+
+        res.status(200).json({
+            message:"updated successfully",
+            data:newData
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message:"Internal server error",
             error:error.message
         })
     }
