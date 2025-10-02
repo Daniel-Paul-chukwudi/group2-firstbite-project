@@ -270,3 +270,56 @@ exports.changePassword = async (req,res)=>{
         })
     }
 }
+
+exports.getOne = async (req,res)=>{
+    try {
+        const userId = req.params.id
+        if(!userId){
+            return res.status(400).json({
+                message:"userId required"
+            })
+        }
+
+        const user = await userModel.findById(userId)
+        if(!user){
+            return res.status(404).json({
+                message:"User not found"
+            })
+        }
+
+        res.status(200).json({
+            message:"user found",
+            data:user
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message:"internal server error",
+            error:error.message
+        })
+    }
+}
+
+exports.getAll = async (req,res)=>{
+    try {
+        
+        const user = await userModel.find()
+        if(user.length() < 1){
+            return res.status(200).json({
+                message:"Database empty",
+                data: user
+            })
+        }
+
+        res.status(200).json({
+            message:"All users in DB",
+            data:user
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            message:"internal server error",
+            error:error.message
+        })
+    }
+}
