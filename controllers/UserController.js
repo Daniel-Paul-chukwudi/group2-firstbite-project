@@ -31,6 +31,7 @@ exports.signUp = async (req,res)=>{
         }else{
                 const salt = await bcrypt.genSalt(10)
                 const hashPassword = await bcrypt.hash(password,salt)
+                const otp = Math.round(Math.random() * 1e6).toString().padStart(6, "0")
 
         
         
@@ -39,7 +40,9 @@ exports.signUp = async (req,res)=>{
             email,
             password:hashPassword,
             phoneNumber,
-            deliveryAddress
+            deliveryAddress,
+            otp,
+            otpExpiredAt: Date.now() + 1000 * 300
         })
         
         await user.save()
@@ -47,44 +50,14 @@ exports.signUp = async (req,res)=>{
         
         
         const token = await jwt.sign({id:user._id},secret,{expiresIn:"5m"})
-        // console.log(user._id);
-        // console.log(token);
         const subject = `Hello ${fullName} kindly verify your email`
         const link = `${req.protocol}://${req.get("host")}/verify/${token}`
-        // console.log(req.protocol)
-        // console.log(req.get("host"))
         
-        // await sendMail({
-            //     to:email,
-            //     subject,
-            //     html:verify(link,user.fullName)
-            // }).then(()=>{console.log("mail sent");
-        // }).catch((e)=>{
-            //     console.log(e);
-            
-            // })
-            
-
-        // const msg = {
-        //   to: email, 
-        //   from: Euser, 
-        //   subject: subject,
-        //   text: 'testing',
-        //   html:verify(link,user.fullName),
-        // }
-        // await sgMail
-        //   .send(msg)
-        //   .then(() => {
-        //     console.log('Email sent')
-        //   })
-        //   .catch((error) => {
-        //     console.error(error)
-        //   })
         
         const  msg={
             email:email,
             subject:subject,
-            html:verify(link,user.fullName)
+            html:verify(link,user.fullName,otp)
         }
         await sendEmail(msg)
 
@@ -108,6 +81,7 @@ exports.signUp = async (req,res)=>{
 exports.verifyUser = async(req,res)=>{
     try {
         const token = req.params.token
+        const {otp} = req.body
 
         jwt.verify(token,secret,async (error,result)=>{
             if(error){
@@ -115,27 +89,24 @@ exports.verifyUser = async(req,res)=>{
                     message:"Email Expired"
                 })
             }else{
-                await userModel.findByIdAndUpdate(result.id,{isVerified:true})
-
+                const user = await userModel.findById(result.id)
+                if (Date.now() > user.otpExpiredAt) {
+                        return res.status(400).json({
+                            message: 'OTP expired'
+                        })
+                }else if (otp !== user.otp) {
+                        return res.status(400).json({
+                            message: 'Invalid otp'
+                        })
+                }else{
+                    await userModel.findByIdAndUpdate(result.id,{isVerified:true,otp:null,otpExpiredAt:null})
+                    res.status(200).json({
+                        message:"Email verification successful"
+                    })
+                }
             }
         })
 
-        // const subject = ``
-        // await sendMail({
-        //     to:email,
-        //     subject,
-        //     html:html(link,user.fullName)
-            
-           
-        // }).then(()=>{console.log("mail sent");
-        // }).catch((e)=>{
-        //     console.log(e);
-            
-        // })
-        // res.redirect(link)
-        res.status(200).json({
-            message:"Email verification successful"
-        })
     } catch (error) {
         res.status(500).json({
         message:"Internal server error",

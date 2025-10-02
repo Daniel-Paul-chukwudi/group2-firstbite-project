@@ -21,10 +21,6 @@ app.use(cartRouter)
 
 
 // console.log(typeof(date));
-const otp = Math.round(Math.random()*1e7)
-console.log(otp);
-
-
 
 
 mongoose.connect(DB).then(()=>{

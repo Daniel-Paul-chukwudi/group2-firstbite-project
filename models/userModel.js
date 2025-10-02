@@ -37,6 +37,12 @@ const userSchema = mongoose.Schema({
     isOnline:{
         type:Boolean,
         default:false
+    },
+    otp:{
+        type:String
+    },
+    otpExpiredAt:{
+        type:String
     }
 },{timestamps:true})
 
