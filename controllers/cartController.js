@@ -12,14 +12,14 @@ exports.addCart = async (req, res) => {
                  });
         }
 
-        const productImage = await productModel.findById(productId)
+        const product = await productModel.findById(productId)
 
         let cart = await cartModel.findOne({ userId });
 
         if (!cart) {
             cart = new cartModel({
                 userId: userId,
-                goods: [{ productId,  quantity: quantity || 1 }]//?
+                goods: [{ productId,productImage :product.productImage ,  quantity: quantity || 1 }]//?
             });
         } else {
             let found = false;
@@ -67,7 +67,7 @@ exports.addCart = async (req, res) => {
 exports.getCart = async (req, res) => {
     try {
         // const { userId } = req.query;
-        const userId = req.body.userId
+        const userId = req.params.userId
         if (!userId) {
             return res.status(400).json({
                  message: 'userId is required'
