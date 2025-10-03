@@ -260,3 +260,32 @@ exports.orderRating = async (req, res) => {
         });
     }
 };
+
+// order summary- using the get one order by id pattern)
+
+exports.orderSummary = async (req, res) => {
+    try {
+        const orderId = req.params.orderId
+        const order = await orderModel.findById(orderId).populate('goods.productId')
+        const user = await userModel.findById(order.userId)
+
+        if (!order) {
+            return res.status(404).json({
+                message: 'Order not found'
+            })
+        };
+
+        res.status(200).json({
+            message: 'Find the order summary below',
+            data: order,
+            userAddress: user.deliveryAddress,
+            phoneNumber: user.phoneNumber
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        })
+    }
+};
