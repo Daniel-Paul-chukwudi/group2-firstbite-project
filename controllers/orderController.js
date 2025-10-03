@@ -133,3 +133,157 @@ try {
     })
 }
 };
+
+exports.reOrder = async (req, res) => {
+    try {
+        const { userId } = req.body;
+        const { orderId } = req.params;
+
+        if (!userId || !orderId) {
+            return res.status(400).json({
+                message: 'User id and order id are required for reorder'
+            });
+
+        } const oldOrder = await orderModel.findById(orderId)
+        if (!oldOrder) {
+            return res.status(404).json({
+                message: "Initial order not found"
+            });
+        }
+        if (oldOrder.userId.toString() !== userId) {
+            return res.status(403).json({
+                message: 'Access denied, you can only reorder your own purchases'
+            });
+        }
+        const itemsToReorder = (oldOrder.goods && oldOrder.goods.length > 0) ? oldOrder.goods : oldOrder.meal || [];
+
+        if (itemsToReorder.length === 0) {
+            return res.status(400).json({
+                message: "This order contains no items to re-order."
+            });
+        }
+
+        let cart = await cartModel.findOne({ userId });
+        if (!cart) {
+            cart = new cartModel({ userId: userId, goods: [], totalPrice: 0 });
+        }
+        let cartTotal = cart.totalPrice;
+
+        for (const orderItem of itemsToReorder) {
+            const productIdString = orderItem.productId.toString();
+            let itemFound = false;
+
+            if (!orderItem.productId || !orderItem.price || !orderItem.quantity) continue;
+
+            for (let cartItem of cart.goods) {
+                if (cartItem.productId.toString() === productIdString) {
+                    cartItem.quantity += orderItem.quantity;
+                    itemFound = true;
+                    break;
+                }
+            }
+
+            if (!itemFound) {
+                cart.goods.push({
+                    productId: orderItem.productId,
+                    quantity: orderItem.quantity
+                });
+            }
+
+            cartTotal += orderItem.price * orderItem.quantity;
+        }
+
+        cart.totalPrice = cartTotal;
+        await cart.save();
+
+         await cart.populate('goods.productId'); 
+
+        res.status(200).json({
+            message: `Reorder is successful, items from order ${oldOrder.orderNumber} added to your cart.`,
+            cart
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: "Internal server error",
+            error: error.message
+        });
+    }
+};
+
+// Order rating
+exports.orderRating = async (req, res) => {
+    try {
+        const { userId, rating } = req.body; 
+        const { orderId } = req.params;
+
+        if (!userId || !orderId || typeof rating !== 'number' || rating < 1 || rating > 5) {
+            return res.status(400).json({ 
+                message: 'A valid userId, orderId, and a rating (1-5) are required'
+            });
+        }
+
+        const order = await orderModel.findById(orderId);
+        if (!order) {
+            return res.status(404).json({ 
+                message: 'Order not found' 
+            });
+        }
+        
+        if (order.userId.toString() !== userId) {
+            return res.status(403).json({ 
+                message: 'Access denied, you can only rate your own orders'
+                 });
+        }
+        
+        if (order.rating) {
+             return res.status(400).json({
+                 message: `This order has already been rated ${order.rating} stars.` });
+        }
+
+        order.rating = rating;
+        await order.save(); 
+
+        res.status(200).json({
+            message: `Order ${order.orderNumber} rated successfully with ${rating} stars.`,
+            data: { 
+                orderId: order._id,
+                rating: order.rating 
+            }
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        });
+    }
+};
+
+
+exports.orderSummary = async (req, res) => {
+    try {
+        const orderId = req.params.orderId
+        const order = await orderModel.findById(orderId).populate('goods.productId')
+        const user = await userModel.findById(order.userId)
+
+        if (!order) {
+            return res.status(404).json({
+                message: 'Order not found'
+            })
+        };
+
+        res.status(200).json({
+            message: 'Find the order summary below',
+            data: order,
+            userAddress: user.deliveryAddress,
+            phoneNumber: user.phoneNumber
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: 'Internal server error',
+            error: error.message
+        })
+    }
+};
