@@ -54,6 +54,7 @@ exports.getAllProduct = async (req,res)=>{
             const products = await productModel.find()
             res.status(200).json({
                 message:"Products fetched successfully",
+                total:products.length,
                 data:products
             })
         } catch (error) {
