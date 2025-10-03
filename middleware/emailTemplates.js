@@ -68,13 +68,13 @@ exports.verify = (firstName,otp)=>{
             <body>
             <div class="container">
             <div class="header">
-            <h1>OLODO you don forget password</h1>
+            <h1>Welcome to FirstBite </h1>
             </div>
             <div class="content">
             <p>Hello ${firstName},</p>
             <p>this is your otp use it to verify ${otp} it expires in 5 mins</p>
                 
-                <p>If your village people dey follow you forget am again</p>
+                <p>Have a wonderful day</p>
                 <p>Best regards,<br>firstBite Team</p>
             </div>
             <div class="footer">
