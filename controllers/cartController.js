@@ -14,27 +14,36 @@ exports.addCart = async (req, res) => {
 
         const product = await productModel.findById(productId)
 
+        let productImage =[]
         let cart = await cartModel.findOne({ userId });
-
         if (!cart) {
             cart = new cartModel({
                 userId: userId,
-                goods: [{ productId,productImage :product.productImages[0].imageUrl ,  quantity: quantity || 1 }]//?
+                goods: [{ productId,  quantity: quantity || 1 }]//?
             });
+            productImage.push(product.productImages[0].imageUrl)
+            console.log(productImage);
+            return productImage
+            
         } else {
             let found = false;
             for (let item of cart.goods) {
                 if (item.productId.toString() === productId) {
                     item.quantity += quantity || 1;
                     found = true;
+
                     break;
                 }
             }
             if (!found) {
-                cart.goods.push({ productId: productId,productImage :product.productImages[0].imageUrl, quantity: quantity || 1 });
+                cart.goods.push({ productId: productId, quantity: quantity || 1 });
+                productImage.push(product.productImages[0].imageUrl)
+                // console.log("url",product.productImages[0].imageUrl);
+                // console.log("pi",productImage);
+                
             }
         }
-
+        // console.log("pi2",productImage);
         let total = 0;
         for (const item of cart.goods) {
             const product = await productModel.findById(item.productId);
@@ -49,11 +58,11 @@ exports.addCart = async (req, res) => {
         // userCart = user.cart
         // userCart.push(cart._id)
         await userModel.findByIdAndUpdate(userId,{cart: cart._id})
-        await cart.populate('goods.productId', 'productName price');
+        await cart.populate('goods.productId', 'productName price productImages');
 
         res.status(200).json({
             message: 'Cart added successfully',
-            cart
+            cart, productImage
         });
     } catch (error) {
         res.status(500).json({
@@ -73,7 +82,7 @@ exports.getCart = async (req, res) => {
                  message: 'userId is required'
                  });
         }
-        const cart = await cartModel.findOne({ userId }).populate('goods.productId');//changed findOne to find to get all items in cart
+        const cart = await cartModel.findOne({ userId }).populate('goods');//changed findOne to find to get all items in cart
 
         if (!cart) {
             return res.status(404).json({
