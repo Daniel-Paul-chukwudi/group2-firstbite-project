@@ -19,7 +19,7 @@ exports.addCart = async (req, res) => {
         if (!cart) {
             cart = new cartModel({
                 userId: userId,
-                goods: [{ productId,productImage :product.productImage ,  quantity: quantity || 1 }]//?
+                goods: [{ productId,productImage :product.productImages[0].imageUrl ,  quantity: quantity || 1 }]//?
             });
         } else {
             let found = false;
@@ -31,7 +31,7 @@ exports.addCart = async (req, res) => {
                 }
             }
             if (!found) {
-                cart.goods.push({ productId: productId, quantity: quantity || 1 });
+                cart.goods.push({ productId: productId,productImage :product.productImages[0].imageUrl, quantity: quantity || 1 });
             }
         }
 
@@ -96,7 +96,9 @@ exports.getCart = async (req, res) => {
 
 exports.updateCart = async (req, res) => {//not really needed
     try {
-        const { userId, productId, quantity } = req.body;
+        const { userId, productId } = req.params;
+        const {quantity }= req.body
+
         if (!userId || !productId || typeof quantity !== 'number' || quantity < 1) {
             return res.status(400).json({
                  message: 'userId, productId and quantity are required'
@@ -151,7 +153,7 @@ exports.updateCart = async (req, res) => {//not really needed
 
 exports.deleteAProduct = async (req, res) => {
     try {
-        const { userId, productId } = req.body;
+        const { userId, productId } = req.params;
         if (!userId || !productId) {
             return res.status(400).json({
                  message: 'userId and productId are required'
@@ -211,7 +213,7 @@ exports.deleteAProduct = async (req, res) => {
 
 exports.clearCart = async (req, res) => {
     try {
-        const { userId } = req.body;
+        const { userId } = req.params;
         if (!userId) {
             return res.status(400).json({ 
                 message: 'userId is required' 
