@@ -64,8 +64,6 @@ exports.createOrder = async (req, res) => {
         });
     }
 };
-
-// Get all orders
 exports.getAllOrders = async (req, res) => {
     try {
         const orders = await orderModel.find();
@@ -81,8 +79,6 @@ exports.getAllOrders = async (req, res) => {
         });
     }
 };
-
-// Get one order
 exports.getOneOrder = async (req, res) => {
     try {
         const orderId = req.params.id
@@ -107,9 +103,6 @@ res.status(200).json({
         })
     }
 };
-
-// Get all orders for a specific user
-
 exports.getOrdersByUser = async (req, res)=>{
 try {
     const userId = req.params.userId
@@ -133,7 +126,6 @@ try {
     })
 }
 };
-
 exports.reOrder = async (req, res) => {
     try {
         const { userId } = req.body;
@@ -210,8 +202,6 @@ exports.reOrder = async (req, res) => {
         });
     }
 };
-
-// Order rating
 exports.orderRating = async (req, res) => {
     try {
         const { userId, rating } = req.body; 
@@ -259,8 +249,6 @@ exports.orderRating = async (req, res) => {
         });
     }
 };
-
-
 exports.orderSummary = async (req, res) => {
     try {
         const orderId = req.params.orderId

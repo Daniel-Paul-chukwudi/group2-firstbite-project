@@ -18,7 +18,7 @@ app.use(cors({origin:"*"}))
 app.use(userRouter)
 app.use(productRouter)
 app.use(cartRouter)
-app.use('/orders', orderRouter)
+app.use(orderRouter)
 
 const swaggerDefinition = {
   openapi: '3.0.0',
