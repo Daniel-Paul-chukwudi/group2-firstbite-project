@@ -71,8 +71,6 @@ exports.addCart = async (req, res) => {
         });
     }
 };
-
-
 exports.getCart = async (req, res) => {
     try {
         // const { userId } = req.query;
@@ -101,8 +99,6 @@ exports.getCart = async (req, res) => {
         });
     }
 };
-
-
 exports.updateCart = async (req, res) => {//not really needed
     try {
         const { userId, productId } = req.params;
@@ -158,8 +154,6 @@ exports.updateCart = async (req, res) => {//not really needed
         });
     }
 };
-
-
 exports.deleteAProduct = async (req, res) => {
     try {
         const { userId, productId } = req.params;
@@ -217,9 +211,6 @@ exports.deleteAProduct = async (req, res) => {
         });
     }
 };
-
-
-
 exports.clearCart = async (req, res) => {
     try {
         const { userId } = req.params;
