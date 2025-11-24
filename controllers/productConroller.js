@@ -89,8 +89,7 @@ exports.getAProduct = async (req,res)=>{
 exports.getCategories= async (req,res)=>{
     try {
         const products = await productModel.find()
-        
-        
+    
         var categories = []
         
         let holder = []
@@ -98,7 +97,6 @@ exports.getCategories= async (req,res)=>{
             holder.push(x.category)
         });
       
-        
         categories = holder.filter((value, index, self) => self.indexOf(value) === index);
         
         
@@ -189,7 +187,17 @@ exports.deleteAProduct = async (req,res)=>{
    
 exports.getOneCategory = async ()=>{
     try {
-        
+        const {category} = req.query
+        const target =  await productModel.find({category:category})
+        if(!target){
+            return res.status(404).json({
+                message:"invalid category or category not found"
+            })
+        }
+        res.status(200).json({
+            message:"items in this category",
+            data:target
+        })
     } catch (error) {
         res.status(500).json({
                 message:"Internal Server Error",
