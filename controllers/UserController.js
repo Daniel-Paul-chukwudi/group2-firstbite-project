@@ -47,14 +47,9 @@ exports.signUp = async (req,res)=>{
         
         await user.save()
 
-        
-        
         const token = await jwt.sign({id:user._id},secret,{expiresIn:"5m"})
         const subject = `Hello ${fullName} kindly verify your email`
         // const link = `${req.protocol}://${req.get("host")}/verify/${token}`
-        
-        
-        
         const  msg={
             email:email,
             subject:subject,
@@ -78,7 +73,6 @@ exports.signUp = async (req,res)=>{
       })  
     }
 }
-
 exports.verifyUser = async(req,res)=>{
     try {
         const token = req.params.token
@@ -119,7 +113,6 @@ exports.verifyUser = async(req,res)=>{
       })
     }
 }
-
 exports.signIn = async (req,res)=>{
     try {
         const {email,password} = req.body
@@ -194,7 +187,6 @@ exports.forgotPassword = async (req,res)=>{
         })
     }
 }
-
 exports.resetPassword  = async (req,res)=>{
     try {
         const {newPassword,confirmPassword} = req.body
@@ -271,7 +263,6 @@ exports.changePassword = async (req,res)=>{
         })
     }
 }
-
 exports.getOne = async (req,res)=>{
     try {
         const userId = req.params.id
@@ -300,7 +291,6 @@ exports.getOne = async (req,res)=>{
         })
     }
 }
-
 exports.getAll = async (req,res)=>{
     try {
         
@@ -324,7 +314,6 @@ exports.getAll = async (req,res)=>{
         })
     }
 }
-
 exports.updateUser = async(req,res)=>{
     try {
         
